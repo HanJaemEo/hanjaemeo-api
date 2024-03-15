@@ -1,0 +1,20 @@
+{
+  "name": "@hanjaemeo-api/tsconfig",
+  "version": "0.1.0",
+  "repository": "https://github.com/HanJaemEo/hanjaemeo-api.git",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "fmt": "biome format .",
+    "fmt:fix": "biome format --write",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --apply"
+  },
+  "devDependencies": {
+    "@tsconfig/bun": "1.0.4",
+    "@tsconfig/create-react-app": "2.0.2",
+    "@tsconfig/next": "2.0.1",
+    "@tsconfig/node-lts": "20.1.1",
+    "@tsconfig/strictest": "2.0.3"
+  }
+}

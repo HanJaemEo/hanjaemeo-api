@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@hanjaemeo-api/tsconfig/tsconfig.node.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/",
+    "paths": {
+      "#api/*": ["./src/*"],
+      "~api/*": ["./*"]
+    }
+  },
+  "include": ["./**/*", "./*.*ts"],
+  "exclude": ["**/dist/**/*", "**/node_modules/**/*", "./*.*js"]
+}

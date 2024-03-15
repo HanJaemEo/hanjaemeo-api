@@ -1,0 +1,17 @@
+{
+  "name": "hanjaemeo-api",
+  "workspaceFolder": "/workspaces/hanjaemeo-api/",
+  "dockerComposeFile": ["../docker/docker-compose.development.yaml"],
+  "service": "app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "adam-bender.commit-message-editor",
+        "biomejs.biome",
+        "editorconfig.editorconfig",
+        "graphql.vscode-graphql",
+        "oven.bun-vscode"
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@hanjaemeo-api/type",
+  "version": "0.1.0",
+  "repository": "https://github.com/HanJaemEo/hanjaemeo-api.git",
+  "license": "MIT",
+  "private": true,
+  "main": "./src/index.ts",
+  "scripts": {
+    "fmt": "biome format .",
+    "fmt:fix": "biome format --write",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --apply",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@hanjaemeo-api/tsconfig": "workspace:*",
+    "ts-essentials": "9.4.1"
+  }
+}

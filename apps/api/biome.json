@@ -1,0 +1,19 @@
+{
+  "$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["../../biome.json"],
+  "linter": {
+    "rules": {
+      "complexity": {
+        "noUselessConstructor": "off"
+      },
+      "style": {
+        "noParameterProperties": "off"
+      }
+    }
+  },
+  "javascript": {
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
+    }
+  }
+}

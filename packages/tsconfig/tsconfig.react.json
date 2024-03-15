@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  // https://github.com/tsconfig/bases/blob/main/bases/create-react-app.json
+  "extends": ["./tsconfig.strictest.json", "@tsconfig/create-react-app/tsconfig"]
+}

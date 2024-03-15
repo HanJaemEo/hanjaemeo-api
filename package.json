@@ -1,0 +1,29 @@
+{
+  "name": "hanjaemeo-api",
+  "version": "0.1.0",
+  "repository": "https://github.com/HanJaemEo/hanjaemeo-api.git",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "prepare": "lefthook install",
+    "api": "bun --cwd ./apps/api",
+    "tsconfig": "bun --cwd ./packages/tsconfig",
+    "type": "bun --cwd ./packages/type"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.6.1",
+    "@types/bun": "1.0.8",
+    "cross-env": "7.0.3",
+    "dotenv-cli": "7.4.1",
+    "lefthook": "1.6.6",
+    "rimraf": "5.0.5",
+    "ts-node": "10.9.2",
+    "ts-patch": "3.1.2",
+    "turbo": "1.12.5",
+    "typescript": "5.4.2"
+  },
+  "overrides": {
+    "@langchain/core": "0.1.46"
+  },
+  "workspaces": ["apps/*", "packages/*"]
+}

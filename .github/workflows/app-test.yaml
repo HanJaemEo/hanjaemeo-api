@@ -1,0 +1,66 @@
+name: app test
+
+on: push
+
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
+jobs:
+  filter:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      app: ${{ steps.changes.outputs.app }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: check for file changes
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          token: ${{ github.token }}
+          filters: .github/filter.yaml
+
+  test:
+    runs-on: ubuntu-latest
+    needs: filter
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.0.30
+
+      - name: get bun cache directory
+        id: get-bun-cache-directory
+        run: echo "STORE_PATH=$(bun pm cache)" >> $GITHUB_OUTPUT
+
+      - name: cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.get-bun-cache-directory.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-bun-dependencies-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: ${{ runner.os }}-bun-dependencies-
+
+      - name: install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: static analysis
+        run: bun turbo run fmt lint
+
+      - name: test
+        run: bun turbo run test
+
+  app-test-check:
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ ! failure() }}
+    steps:
+      - name: check
+        run: echo "test is successfully executed."

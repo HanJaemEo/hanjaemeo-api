@@ -1,0 +1,9 @@
+pre-commit:
+  parallel: true
+  commands:
+    check:
+      glob: "*.*{js,ts}*"
+      run: bun biome check --apply {staged_files}
+    lint:
+      glob: "*.*{js,ts}*"
+      run: bun biome lint --apply {staged_files}

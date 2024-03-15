@@ -1,0 +1,25 @@
+ARG TURBO_TEAM
+ARG TURBO_TOKEN
+
+FROM oven/bun:1.0.30 AS builder
+ENV TURBO_TEAM=${TURBO_TEAM}
+ENV TURBO_TOKEN=${TURBO_TOKEN}
+
+WORKDIR /hanjaemeo-api/
+
+COPY ./ ./
+RUN bun install --frozen-lockfile --ignore-scripts
+# hadolint ignore=DL3059
+RUN bun turbo --filter='@hanjaemeo-api/api' build
+
+FROM oven/bun:1.0.30-alpine AS runner
+ENV NODE_ENV=production
+
+WORKDIR /hanjaemeo-api/
+
+COPY --from=builder /hanjaemeo-api/node_modules/ ./node_modules/
+COPY --from=builder /hanjaemeo-api/apps/api/dist/ ./apps/api/dist/
+
+WORKDIR /hanjaemeo-api/apps/api/
+
+ENTRYPOINT ["bun", "./dist/main.js"]

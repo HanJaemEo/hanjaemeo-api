@@ -1,0 +1,35 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# deliverable
+.next/
+build/
+dist/
+out/
+
+# dependency
+node_modules/
+
+# env file
+.env*
+!.env.example
+
+# misc
+.DS_Store
+*.pem
+
+# storybook
+**/.storybook/static/
+
+# testing
+coverage/
+
+# typescript
+*.tsbuildinfo
+
+# vercel
+.vercel/
+.turbo/
+.vercel
+
+# paper
+paper/

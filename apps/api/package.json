@@ -1,0 +1,47 @@
+{
+  "name": "@hanjaemeo-api/api",
+  "version": "0.1.0",
+  "repository": "https://github.com/HanJaemEo/hanjaemeo-api.git",
+  "license": "MIT",
+  "private": true,
+  "type": "commonjs",
+  "module": "nodenext",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nest start --watch --exec bun",
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "start": "cross-env NODE_ENV=production nest start --exec bun",
+    "start:dev": "cross-env NODE_ENV=development nest start --exec bun",
+    "prod": "bun ./dist/main",
+    "fmt": "biome format .",
+    "fmt:fix": "biome format --write",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --apply",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@as-integrations/fastify": "2.1.1",
+    "@fastify/compress": "7.0.0",
+    "@fastify/cors": "9.0.1",
+    "@fastify/helmet": "11.1.1",
+    "@fastify/rate-limit": "9.1.0",
+    "@langchain/core": "0.1.46",
+    "@langchain/openai": "0.0.20",
+    "@nestjs/cli": "10.3.2",
+    "@nestjs/common": "10.3.3",
+    "@nestjs/config": "3.2.0",
+    "@nestjs/core": "10.3.3",
+    "@nestjs/platform-fastify": "10.3.3",
+    "@nestjs/testing": "10.3.3",
+    "langchain": "0.1.27",
+    "ts-pattern": "5.0.8",
+    "uuid": "9.0.1",
+    "zod": "3.22.4"
+  },
+  "devDependencies": {
+    "@hanjaemeo-api/tsconfig": "workspace:*",
+    "@hanjaemeo-api/type": "workspace:*",
+    "@nestjs/schematics": "10.1.1",
+    "@types/uuid": "9.0.8"
+  }
+}

@@ -1,0 +1,11 @@
+services:
+  app:
+    container_name: hanjaemeo-api-app
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.development
+    volumes:
+      - type: bind
+        source: ../
+        target: /workspaces/hanjaemeo-api/
+    tty: true
