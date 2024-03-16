@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Inject, Logger, Param, Post, Res } from '@nestjs/common';
+import fs from 'node:fs';
+import { Body, Controller, Inject, Logger, Post, Res } from '@nestjs/common';
 import type { FastifyReply } from 'fastify';
-import { OpenaiService } from '#api/infra/openai/openai.service';
-import { YoutubeService } from '../youtube/youtube.service';
+import { OpenaiService, type TranscribedData } from '#api/infra/openai/openai.service';
+import { YoutubeService } from '#api/infra/youtube/youtube.service';
+import { LangchainService } from './langchain.service';
 
 class Message {
   role!: 'user' | 'assistant';
@@ -13,22 +15,31 @@ export class LangchainController {
   private readonly logger = new Logger(LangchainController.name);
 
   constructor(
+    @Inject(LangchainService)
+    private readonly langchainService: LangchainService,
     @Inject(OpenaiService)
     private readonly openaiService: OpenaiService,
     @Inject(YoutubeService)
     private readonly youtubeService: YoutubeService,
   ) {}
 
-  @Get('/predict/:id')
-  async transcribeYoutubeVideo(@Param('id') id: string): Promise<string> {
+  @Post('/analyze/')
+  async transcribeYoutubeVideo(@Body('url') url: string) {
     this.logger.log(`${this.transcribeYoutubeVideo.name} called`);
-    this.logger.debug(`Transcribing video: https://www.youtube.com/watch?v=${id}`);
+    this.logger.debug(`Transcribing video: ${url}`);
 
-    const outputFilePath = await this.youtubeService.saveVideoStreamToFile(`https://www.youtube.com/watch?v=${id}`);
+    const audioFilePath = await this.youtubeService.saveVideoStreamToFile(url);
 
-    const transcription = await this.openaiService.transcribeFromFile(outputFilePath);
+    const metadataJsonPath = await this.openaiService.transcribeToFile(audioFilePath);
 
-    return transcription;
+    const transcribedData = JSON.parse(fs.readFileSync(metadataJsonPath, { encoding: 'utf-8' })) as TranscribedData;
+
+    const mdx = await this.langchainService.generateMdx(transcribedData);
+
+    return {
+      id: /\/([^/]+)\.mp3$/.exec(audioFilePath)![1],
+      mdx,
+    };
   }
 
   @Post('/call')

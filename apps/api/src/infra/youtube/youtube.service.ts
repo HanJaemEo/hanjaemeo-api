@@ -49,9 +49,9 @@ export class YoutubeService {
   }
 
   private isAlreadyConverted(id: string): boolean {
-    const downloaded = fs.existsSync(`./tmp/${id}.mp3`);
+    const converted = fs.existsSync(`./tmp/${id}.mp3`);
 
-    return downloaded;
+    return converted;
   }
 
   private async convertToMp3(inputPath: string, id: string): Promise<string> {

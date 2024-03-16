@@ -4,6 +4,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OpenAI } from 'openai';
 import { EnvService } from '#api/common/service/env/env.service';
 
+export type TranscribedData = {
+  duration: number;
+  text: string;
+  segments: {
+    id: number;
+    start: number;
+    end: number;
+    text: string;
+  }[];
+};
+
 @Injectable()
 export class OpenaiService {
   private readonly openai: OpenAI;
@@ -22,16 +33,28 @@ export class OpenaiService {
     });
   }
 
-  async transcribeFromFile(path: string): Promise<string> {
+  async transcribeToFile(audioFilePath: string): Promise<string> {
+    if (this.isAlreadyTranscribed(audioFilePath)) {
+      return audioFilePath.replace(/\.\w+$/, '.json');
+    }
+
     const res = await this.openai.audio.transcriptions.create({
       model: 'whisper-1',
-      language: 'ko',
       timestamp_granularities: ['segment'],
       response_format: 'verbose_json',
-      file: fs.createReadStream(path),
+      file: fs.createReadStream(audioFilePath),
     });
 
-    return res.text;
+    const metadataJsonPath = audioFilePath.replace(/\.\w+$/, '.json');
+    fs.writeFileSync(metadataJsonPath, JSON.stringify(res, null, 2), { encoding: 'utf-8' });
+
+    return metadataJsonPath;
+  }
+
+  private isAlreadyTranscribed(audioFilePath: string): boolean {
+    const transcribed = fs.existsSync(audioFilePath.replace(/\.\w+$/, '.json'));
+
+    return transcribed;
   }
 
   async llmCall(prompt: string, handleLLMNewToken: (token: string) => void | Promise<void>) {
