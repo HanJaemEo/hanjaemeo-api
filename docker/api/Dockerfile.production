@@ -12,8 +12,14 @@ RUN bun install --frozen-lockfile --ignore-scripts
 # hadolint ignore=DL3059
 RUN bun turbo --filter='@hanjaemeo-api/api' build
 
-FROM oven/bun:1.0.30-alpine AS runner
+FROM oven/bun:1.0.30-slim AS runner
 ENV NODE_ENV=production
+
+# hadolint ignore=DL3008
+RUN apt-get update \
+  && apt-get --no-install-recommends -y install ffmpeg \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists
 
 WORKDIR /hanjaemeo-api/
 

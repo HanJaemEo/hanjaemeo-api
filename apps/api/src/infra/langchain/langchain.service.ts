@@ -30,9 +30,7 @@ export class LangchainService {
 
   private readonly logger = new Logger(LangchainService.name);
 
-  constructor(@Inject(EnvService) private readonly envService: EnvService) {
-    this.logger.debug(`${LangchainService.name} constructed`);
-  }
+  constructor(@Inject(EnvService) private readonly envService: EnvService) {}
 
   async embedding(text: string) {
     if (!this.embeddingModel) {

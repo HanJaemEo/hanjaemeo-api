@@ -4,5 +4,9 @@ schema.gql
 # auto generated folder
 generated
 
+# tmp files
+tmp/*
+!tmp/.gitkeep
+
 # certificates
 *.crt

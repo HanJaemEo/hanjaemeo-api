@@ -6,7 +6,6 @@ export class EnvService {
   private readonly logger = new Logger(EnvService.name);
 
   constructor(@Inject(ConfigService) private readonly configService: ConfigService) {
-    this.logger.debug(`${EnvService.name} constructed`);
     this.logger.log(`NODE_ENV: ${this.NodeEnv}`);
   }
 
