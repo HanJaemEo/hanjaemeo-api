@@ -1,3 +1,4 @@
+import type { AIMessage, HumanMessage } from '@langchain/core/messages';
 import { ChatOpenAI } from '@langchain/openai';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { OutputFixingParser, StructuredOutputParser } from 'langchain/output_parsers';
@@ -5,6 +6,7 @@ import { z } from 'zod';
 import { EnvService } from '#api/common/service/env/env.service';
 import type { TranscribedData } from '../openai/openai.service';
 import { KoreanMdxAgent } from './agent/korean-mdx-agent';
+import { KoreanQaAgent } from './agent/korean-qa-agent';
 
 @Injectable()
 export class LangchainService {
@@ -15,6 +17,7 @@ export class LangchainService {
   constructor(
     @Inject(EnvService) private readonly envService: EnvService,
     @Inject(KoreanMdxAgent) private readonly koeranMdxAgent: KoreanMdxAgent,
+    @Inject(KoreanQaAgent) private readonly koreanQaAgent: KoreanQaAgent,
   ) {
     this.llm = new ChatOpenAI({
       openAIApiKey: this.envService.OpenaiApiKey,
@@ -67,6 +70,27 @@ export class LangchainService {
     );
 
     return mdxs.join('\n');
+  }
+
+  async conversation(
+    content: string,
+    chatHistory: (AIMessage | HumanMessage)[],
+    transcribedSentence: string,
+    handleLLMNewToken: (token: string) => void | Promise<void>,
+  ) {
+    const KoreanQaAgent = await this.koreanQaAgent.createAgentExecutor(transcribedSentence);
+
+    const agentResponse = await KoreanQaAgent.invoke(
+      {
+        input: content,
+        chat_history: chatHistory,
+      },
+      {
+        callbacks: [{ handleLLMNewToken }],
+      },
+    );
+
+    return agentResponse['output'];
   }
 
   private async parseOutputAsStructure<T>(output: string, zodSchema: z.Schema<T>) {
