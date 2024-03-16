@@ -1,4 +1,5 @@
-import { Controller, Get, Inject, Logger, Param } from '@nestjs/common';
+import { Controller, Get, Inject, Logger, Param, Post, Res } from '@nestjs/common';
+import type { Response } from 'express';
 import { OpenaiService } from '#api/infra/openai/openai.service';
 import { YoutubeService } from '../youtube/youtube.service';
 
@@ -23,5 +24,14 @@ export class LangchainController {
     const transcription = await this.openaiService.transcribeFromFile(outputFilePath);
 
     return transcription;
+  }
+
+  @Post('/call')
+  async predict(@Res() res: Response) {
+    this.logger.log(`${this.predict.name} called`);
+
+    await this.openaiService.llmCall('Why do people meet?', res);
+
+    res.end();
   }
 }
