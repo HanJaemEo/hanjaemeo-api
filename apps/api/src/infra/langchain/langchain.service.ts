@@ -75,10 +75,10 @@ export class LangchainService {
   async conversation(
     content: string,
     chatHistory: (AIMessage | HumanMessage)[],
-    transcribedSentence: string,
+    transcribedDataPath: string,
     handleLLMNewToken: (token: string) => void | Promise<void>,
   ) {
-    const KoreanQaAgent = await this.koreanQaAgent.createAgentExecutor(transcribedSentence);
+    const KoreanQaAgent = await this.koreanQaAgent.createAgentExecutor(transcribedDataPath);
 
     const agentResponse = await KoreanQaAgent.invoke(
       {

@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "ignore": [".next/", ".storybook/static/", "dist/", "generated/", "meta/", "node_modules/"],
+    "ignore": [".next/", ".storybook/static/", "dist/", "generated/", "meta/", "node_modules/", "tmp/"],
     "include": ["**/*.*js*", "**/*.*ts*"]
   },
   "linter": {

@@ -56,13 +56,11 @@ export class LangchainController {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.writeHead(200, { 'Content-Type': 'text/plain' });
 
-    const transcribedData = JSON.parse(fs.readFileSync(`./tmp/${id}.json`, { encoding: 'utf-8' })) as TranscribedData;
-
     const chatHistory = messages.map(message =>
       message.role === 'user' ? new HumanMessage(message.content) : new AIMessage(message.content),
     );
 
-    await this.langchainService.conversation(messages.at(-1)!.content, chatHistory, transcribedData.text, token => {
+    await this.langchainService.conversation(messages.at(-1)!.content, chatHistory, `./tmp/${id}.json`, token => {
       res.write(token);
     });
 

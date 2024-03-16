@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import { ChatOpenAI } from '@langchain/openai';
 import { Inject, Injectable } from '@nestjs/common';
 import { OpenAI } from 'openai';
 import { EnvService } from '#api/common/service/env/env.service';
@@ -19,18 +18,8 @@ export type TranscribedData = {
 export class OpenaiService {
   private readonly openai: OpenAI;
 
-  private readonly llm: ChatOpenAI;
-
   constructor(@Inject(EnvService) private readonly envService: EnvService) {
     this.openai = new OpenAI({ apiKey: this.envService.OpenaiApiKey });
-
-    this.llm = new ChatOpenAI({
-      openAIApiKey: this.envService.OpenaiApiKey,
-      modelName: 'gpt-3.5-turbo',
-      maxTokens: 4096,
-      temperature: 0.2,
-      streaming: true,
-    });
   }
 
   async transcribeToFile(audioFilePath: string): Promise<string> {
@@ -55,13 +44,5 @@ export class OpenaiService {
     const transcribed = fs.existsSync(audioFilePath.replace(/\.\w+$/, '.json'));
 
     return transcribed;
-  }
-
-  async llmCall(prompt: string, handleLLMNewToken: (token: string) => void | Promise<void>) {
-    const stream = await this.llm.invoke(prompt, {
-      callbacks: [{ handleLLMNewToken }],
-    });
-
-    return stream;
   }
 }
