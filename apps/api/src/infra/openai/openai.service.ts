@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import { ChatOpenAI } from '@langchain/openai';
 import { Inject, Injectable } from '@nestjs/common';
-import type { Response } from 'express';
 import { OpenAI } from 'openai';
 import { EnvService } from '#api/common/service/env/env.service';
 
@@ -35,15 +34,9 @@ export class OpenaiService {
     return res.text;
   }
 
-  async llmCall(prompt: string, res: Response) {
+  async llmCall(prompt: string, handleLLMNewToken: (token: string) => void | Promise<void>) {
     const stream = await this.llm.invoke(prompt, {
-      callbacks: [
-        {
-          async handleLLMNewToken(token) {
-            await res.write(token);
-          },
-        },
-      ],
+      callbacks: [{ handleLLMNewToken }],
     });
 
     return stream;

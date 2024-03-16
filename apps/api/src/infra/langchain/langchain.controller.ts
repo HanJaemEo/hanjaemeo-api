@@ -1,7 +1,12 @@
-import { Controller, Get, Inject, Logger, Param, Post, Res } from '@nestjs/common';
-import type { Response } from 'express';
+import { Body, Controller, Get, Inject, Logger, Param, Post, Res } from '@nestjs/common';
+import type { FastifyReply } from 'fastify';
 import { OpenaiService } from '#api/infra/openai/openai.service';
 import { YoutubeService } from '../youtube/youtube.service';
+
+class Message {
+  role!: 'user' | 'assistant';
+  content!: string;
+}
 
 @Controller()
 export class LangchainController {
@@ -27,10 +32,17 @@ export class LangchainController {
   }
 
   @Post('/call')
-  async predict(@Res() res: Response) {
+  async predict(@Res() { raw: res }: FastifyReply, @Body('messages') messages: Message[]) {
     this.logger.log(`${this.predict.name} called`);
 
-    await this.openaiService.llmCall('Why do people meet?', res);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+
+    await this.openaiService.llmCall(messages.at(-1)!.content, token => {
+      res.write(token);
+    });
 
     res.end();
   }
