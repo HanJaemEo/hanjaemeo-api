@@ -80,23 +80,23 @@ export class KoreanMdxAgent {
             <Timestamp t="88.123" />
 
             <p>
-              <Noun>{유행}^(流行)</Noun>
-              <Particle>{이}^(が)</Particle>
+              <Noun>[유행]^(流行)</Noun>
+              <Particle>[이]^(が)</Particle>
               <Space />
-              <Verb>{돌고}^(回り)</Verb>
+              <Verb>[돌고]^(回り)</Verb>
               <Space />
-              <Verb>{돌아도}^(回っても)</Verb>
+              <Verb>[돌아도]^(回っても)</Verb>
               <Space />
-              <Pronoun>{난}^(私は)</Pronoun>
+              <Pronoun>[난]^(私は)</Pronoun>
               <Space />
-              <Determiner>{그}^(その)</Determiner>
+              <Determiner>[그]^(その)</Determiner>
               <Space />
-              <Noun>{틀}^(枠)</Noun>
-              <Particle>{에}^(に)</Particle>
+              <Noun>[틀]^(枠)</Noun>
+              <Particle>[에]^(に)</Particle>
               <Space />
-              <Verb>{없어}^(いない)</Verb>
+              <Verb>[없어]^(いない)</Verb>
               <Space />
-              <Adverb>{이미}^(もう)</Adverb>
+              <Adverb>[이미]^(もう)</Adverb>
             </p>
 
             > 流行が回り回っても、私はもうその枠にいないの

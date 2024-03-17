@@ -21,7 +21,7 @@ export class LangchainService {
   ) {
     this.llm = new ChatOpenAI({
       openAIApiKey: this.envService.OpenaiApiKey,
-      modelName: 'gpt-3.5-turbo',
+      modelName: 'gpt-4-turbo-preview',
       maxTokens: -1,
       temperature: 0.2,
     });
